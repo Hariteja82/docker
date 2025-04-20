@@ -1,0 +1,16 @@
+FROM ubuntu
+
+LABEL maintainer="hari"
+
+# Fix DNS issue, clean cache, update, and install httpd
+RUN apt update -y
+RUN apt install apache2 -y
+
+# Copy website files into default Apache root
+COPY . /var/www/html/
+
+# Expose port 80 (optional but recommended)
+EXPOSE 80
+
+# Start Apache in foreground
+CMD ["/usr/sbin/apachectl", "-D", "FOREGROUND"]
