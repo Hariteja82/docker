@@ -14,3 +14,68 @@ EXPOSE 80
 
 # Start Apache in foreground
 CMD ["/usr/sbin/apachectl", "-D", "FOREGROUND"]
+
+centos:-
+
+FROM centos:centos7
+
+LABEL maintainer="yourname@example.com"
+
+# Fix DNS issue + update + install httpd
+RUN echo "nameserver 8.8.8.8" > /etc/resolv.conf && \
+    yum clean all && \
+    yum makecache && \
+    yum -y update && \
+    yum -y install httpd && \
+    yum clean all
+
+# Copy website files (optional)
+COPY . /var/www/html/
+
+# Expose Apache's default port
+EXPOSE 80
+
+# Run Apache in the foreground
+CMD ["/usr/sbin/httpd", "-D", "FOREGROUND"]
+
+
+
+AlmaLinux:-
+
+FROM almalinux:8
+
+RUN dnf -y update && \
+    dnf -y install httpd && \
+    dnf clean all
+
+COPY . /var/www/html/
+EXPOSE 80
+CMD ["/usr/sbin/httpd", "-D", "FOREGROUND"]
+
+
+Rocky Linux:-
+
+
+FROM rockylinux:8
+
+RUN dnf -y update && \
+    dnf -y install httpd && \
+    dnf clean all
+
+COPY . /var/www/html/
+EXPOSE 80
+CMD ["/usr/sbin/httpd", "-D", "FOREGROUND"]
+
+
+Fedora:
+
+FROM fedora:latest
+
+RUN dnf -y update && \
+    dnf -y install httpd && \
+    dnf clean all
+
+COPY . /var/www/html/
+EXPOSE 80
+CMD ["/usr/sbin/httpd", "-D", "FOREGROUND"]
+
